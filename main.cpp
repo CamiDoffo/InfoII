@@ -46,7 +46,7 @@ int main(int argc, char *argv[]) {
 	
 	// show the month of maximum rainfall per year
 	t_month output2[YEARS];
-	max_monthly_rainfall_per_year(array, output2);*/
+	max_monthly_rainfall_per_year(array, output2);
 	return 0;
 }
 
