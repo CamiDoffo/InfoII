@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "array_helpers.h"
+#include "main.cpp"
 
 int lowest_min_temp(WeatherTable array){
     Weather lowest;
