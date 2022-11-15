@@ -21,10 +21,6 @@ struct timestamp{
 	int mm;
 };
 
-struct blablabla{
-	int pepe;
-};
-
 int main(int argc, char *argv[]) {
 	char *filepath = NULL;
 	
