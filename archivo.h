@@ -29,25 +29,25 @@ struct city{
 	char city_name[50];
 };
 
-class Archivo{
+class Archive{
 	private:
 		FILE *fp;
 	public:
-		Archivo();
+		Archive();
 		void scanText(struct city **Cordoba,struct city **SantaFe,struct city **Mendoza);
-		~Archivo();
+		~Archive();
 };
 
 int menu();
 //char* convert_to_string(char a[50]);
-void ordenarLista(struct city **City);
+void sortList(struct city **City);
 void push(struct measurement m, int cityId, int provId, char city_name[50], struct city **head);
-void borrarTodo(struct city **head);
-int cantidadMedidas(struct city *City);
-float tempPromProvincia(struct city *City);
-void tempPromCiudad(struct city *head);
-void ciudadCalida(struct city *head);
-void ciudadFria(struct city *head);
-void diaFrio(struct city *head, int idProv);
-void diaCalor(struct city *head);
-void provPimientos(float promCordoba, float promSantaFe, float promMendoza);
+void popAll(struct city **head);
+int amountSamples(struct city *City);
+float tempAverageProvincie(struct city *City);
+void tempAverageCity(struct city *head);
+void hottestCity(struct city *head);
+void coldestCity(struct city *head);
+void coldestDay(struct city *head, int idProv);
+void hottestDay(struct city *head);
+void bestProvPeppers(float promCordoba, float promSantaFe, float promMendoza);
