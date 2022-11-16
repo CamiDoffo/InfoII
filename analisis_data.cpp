@@ -35,8 +35,8 @@ void Archive::scanText(struct city **Cordoba,struct city **SantaFe,struct city *
 	{
 		fscanf(this->fp,"%d	%d",&id_city,&id_prov);
 		if(id_prov==1)	{
-			fscanf(this->fp,"	%s			%f	%f	%d	%d	%d	%d\n", name, &temperature, &humidity, &hour, &min, &day, &month);
-            strcpy(name, "Cordoba");
+			strcpy(name, "Cordoba");
+            fscanf(this->fp,"	%s			%f	%f	%d	%d	%d	%d\n", name, &temperature, &humidity, &hour, &min, &day, &month);
             m.temp=temperature;
 			m.hum=humidity;
             m.time.hh=hour;
@@ -45,10 +45,9 @@ void Archive::scanText(struct city **Cordoba,struct city **SantaFe,struct city *
             m.time.month=month;
 			push(m,id_city,id_prov,name, Cordoba);
 		}else if(id_prov==2){
-            
-			fscanf(this->fp,"	%s			%f	%f	%d	%d	%d	%d\n", name, &temperature, &humidity, &hour, &min, &day, &month);
 			strcpy(name, "Santa Fe");
-            m.temp=temperature;
+            fscanf(this->fp,"	%s			%f	%f	%d	%d	%d	%d\n", name, &temperature, &humidity, &hour, &min, &day, &month);
+			m.temp=temperature;
 			m.hum=humidity;
             m.time.hh=hour;
             m.time.mm=min;
@@ -58,8 +57,8 @@ void Archive::scanText(struct city **Cordoba,struct city **SantaFe,struct city *
 		}else if(id_prov==3){
             strcpy(name, "Mendoza");
 			fscanf(this->fp,"	%s			%f	%f	%d	%d	%d	%d\n", name, &temperature, &humidity, &hour, &min, &day, &month);
-			m.hum=humidity;
-            m.temp=temperature;
+			m.temp=temperature;
+            m.hum=humidity;
             m.time.hh=hour;
             m.time.mm=min;
             m.time.day=day;
