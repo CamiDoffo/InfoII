@@ -50,4 +50,4 @@ void hottestCity(struct city *head);
 void coldestCity(struct city *head);
 void coldestDay(struct city *head, int idProv);
 void hottestDay(struct city *head);
-void bestProvPeppers(float promCordoba, float promSantaFe, float promMendoza);
+void bestProvPeppers(float averageCordoba, float averageSantaFe, float averageMendoza);

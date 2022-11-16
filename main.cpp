@@ -31,12 +31,12 @@ int main() {
 	{
 		switch (menu())
 		{
-		case 1://funciona
+		case 1:
 			printf("Cantidad de mediciones de Cordoba: %d\n",amountCordoba);
 			printf("Cantidad de mediciones de Santa Fe: %d\n",amountSantaFe);
 			printf("Cantidad de mediciones de Mendoza: %d\n",amountMendoza);
 			break;
-		case 2://funciona
+		case 2:
 			printf("Temperatura promedio de la provincia de Cordoba: %.2f\n",averageCordoba);
 			printf("Temperatura promedio de la provincia de Mendoza: %.2f\n",averageMendoza);
 			printf("Temperatura promedio de la provincia de Santa Fe: %.2f\n",averageSantaFe);

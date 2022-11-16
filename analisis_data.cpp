@@ -148,6 +148,7 @@ void popAll(struct city **head)
 		free(temp);
 	}
 }
+//This function calculates the number of samples of each province
 int amountSamples(struct city *City){
 	struct city *temp=City;
 	int i=0;
@@ -157,6 +158,7 @@ int amountSamples(struct city *City){
 	}
 	return i;
 }
+//This function calculates the average of temperatures of each province
 float tempAverageProvincie(struct city *City)
 {
 	struct city *temp=City;
@@ -171,7 +173,7 @@ float tempAverageProvincie(struct city *City)
 	}
 	return add/i;
 }
-
+//This function calculates the average of temperatures of each city
 void tempAverageCity(struct city *head)
 {
 	struct city *temp=NULL;
@@ -324,16 +326,16 @@ void hottestDay(struct city *head){
 	printf("El dia mas caluroso de la ciudad %s fue el dia %d/%d con %.2f °C.\n",chain,day,month,max);	
 }
 
-void bestProvPeppers(float promCordoba, float promSantaFe, float promMendoza)
+void bestProvPeppers(float averageCordoba, float averageSantaFe, float averageMendoza)
 {
-	if (fabs(promMendoza-23) < fabs(promCordoba-23) && fabs(promMendoza-23) < fabs(promSantaFe-23))
+	if (fabs(averageMendoza-23) < fabs(averageCordoba-23) && fabs(averageMendoza-23) < fabs(averageSantaFe-23))
 	{
-		printf("La mejor provincia para cultivar pimientos es Mendoza ya que tiene una temperatura promedio de %.2f °C.\n",promMendoza);
-	}else if (fabs(promSantaFe-23) < fabs(promCordoba-23))
+		printf("La mejor provincia para cultivar pimientos es Mendoza ya que tiene una temperatura promedio de %.2f °C.\n",averageMendoza);
+	}else if (fabs(averageSantaFe-23) < fabs(averageCordoba-23))
 	{
-		printf("La mejor provincia para cultivar pimientos es Santa Fe ya que tiene una temperatura promedio de %.2f °C.\n",promSantaFe);
+		printf("La mejor provincia para cultivar pimientos es Santa Fe ya que tiene una temperatura promedio de %.2f °C.\n",averageSantaFe);
 	}else
 	{
-		printf("La mejor provincia para cultivar pimientos es Cordoba ya que tiene una temperatura promedio de %.2f °C.\n",promCordoba);
+		printf("La mejor provincia para cultivar pimientos es Cordoba ya que tiene una temperatura promedio de %.2f °C.\n",averageCordoba);
 	}
 }
