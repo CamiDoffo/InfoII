@@ -70,6 +70,9 @@ void Archivo::scanText(struct city **Cordoba,struct city **SantaFe,struct city *
 	}
 	
 	fclose(this->fp);
+	ordenarLista(Cordoba);
+	ordenarLista(SantaFe);
+	ordenarLista(Mendoza);
 }
 int menu(){
 	int op=0;
@@ -80,21 +83,36 @@ int menu(){
 			"4.Ciudad mas calida de cada provincia\n"
 			"5.Ciudad mas fria de cada provincia\n"
 			"6.Dia mas frio de cada provincia\n"
-			"7.Cia mas calido de cada ciudad\n"
+			"7.Dia mas calido de cada ciudad\n"
 			"8.Mejor provincia para cultivar pimientos\n");
 	scanf("%d", &op);
 	return op;
 }
-
-// char* convert_to_string(char a[50]){
-// 	char* s = "";
-// 	for (int i = 0; i < 50; i++)
-// 	{
-// 		s=s+a[i];
-// 	}
-// 	return s;
-// }
-
+void ordenarLista(struct city **City)
+{
+    struct city *actual , *siguiente;
+    int t;
+     
+    actual = *City;
+    while(actual->next != NULL)
+    {
+        siguiente = actual->next;
+         
+        while(siguiente!=NULL)
+        {
+            if(actual->cityId > siguiente->cityId)
+            {
+               t = siguiente->cityId;
+               siguiente->cityId = actual->cityId;
+               actual->cityId = t;          
+            }
+            siguiente = siguiente->next;                    
+        }    
+        actual = actual->next;
+        siguiente = actual->next;
+          
+    }
+}
 void push(struct measurement m, int cityId, int provId, char city_name[50], struct city **head){
     struct city *temp=*head;
     struct city *new_node = (struct city *)malloc(sizeof(struct city));
@@ -108,8 +126,7 @@ void push(struct measurement m, int cityId, int provId, char city_name[50], stru
         new_node->m=m;
 		new_node->cityId=cityId;
 		new_node->provId=provId;
-		for(int i=0; i<50;i++)
-			new_node->city_name[i]=city_name[i];
+		strcpy(new_node->city_name,city_name);
         new_node->next=NULL;
         if(*head==NULL){
             *head=new_node;
@@ -141,10 +158,10 @@ int cantidadMedidas(struct city *City){
 }
 float tempPromProvincia(struct city *City)
 {
-	struct city *temp=NULL;
+	struct city *temp=City;
 	float sum=0.0,prom=0.0;
 	int i=0;
-	temp=City;
+	
 	while(temp!=NULL)
 	{
 		sum+=temp->m.temp;
@@ -155,68 +172,111 @@ float tempPromProvincia(struct city *City)
 	return prom;
 }
 
-struct Data tempPromCiudad(struct city *head, int id)
+void tempPromCiudad(struct city *head)
 {
-	struct city *temp=head;
-	struct Data d;
-	float suma=0.0;
-	int i=0;
-	
+	struct city *temp=NULL;
+	char cadena[50];
+	float suma=0;
+	int idAux=0, i=0, j=0;
+	temp=head;
+	idAux=temp->cityId;
 	while(temp!=NULL)
 	{
-		if(temp->cityId==id)
+		if(temp->cityId==idAux)
 		{
-			suma+=temp->m.temp;
+			suma=suma+temp->m.temp;
 			i++;
-			for(int j=0; j<50; j++)
-			{
-				d.cityName[i]=temp->city_name[j];
-			}
+			strcpy(cadena, temp->city_name);
+		}else{
+			printf("La temperatura promedio en %s es: %.2f °C\n",cadena,suma/i);
+			suma=temp->m.temp;
+			i=1;
+			idAux=temp->cityId;
 		}
 		temp=temp->next;
 	}
-	d.dataf=suma/i;
-	return d;
+	printf("La temperatura promedio en %s es: %.2f °C\n",cadena,suma/i);
 }
-struct Data ciudadCalida(struct city *head)
-{
-	struct Data d;
-	d.dataf=tempPromCiudad(head, 0).dataf;
 
-	for (int i = 1; i < 77; i++)
-	{
-		if(d.dataf<tempPromCiudad(head, i).dataf){
-			d.dataf=tempPromCiudad(head, i).dataf;
-			d.datai=i;
-			for (int i = 0; i < 50; i++)
-			{
-				d.cityName[i]=tempPromCiudad(head, i).cityName[i];
-			}
-		}
-	}
-	return d;
-}
-struct Data ciudadFria(struct city *head)
-{
-	struct Data d;
-	d.dataf=tempPromCiudad(head, 0).dataf;
 
-	for (int i = 1; i < 77; i++)
+void ciudadCalida(struct city *head)
+{
+	struct city *temp=NULL;
+	temp=head;
+	int i=0, idAux=0, idProv=0;
+	char cadena[50],MaxCadena[50];
+	float suma=0, max=0;
+	idAux=temp->cityId;
+	while(temp!=NULL)
 	{
-		if(d.dataf>tempPromCiudad(head, i).dataf){
-			d.dataf=tempPromCiudad(head, i).dataf;
-			for (int i = 0; i < 50; i++)
-			{
-				d.cityName[i]=tempPromCiudad(head, i).cityName[i];
+		if(temp->cityId==idAux)
+		{
+			suma=suma+temp->m.temp;
+			i++;
+			strcpy(cadena, temp->city_name);
+			idProv=temp->provId;
+		}else{
+			if(suma/i>max)
+				{
+				max=suma/i;
+				strcpy(MaxCadena, cadena);
 			}
+			i=1;
+			suma=temp->m.temp;
+			idAux=temp->cityId;
 		}
+		temp=temp->next;
 	}
-	return d;
+	if(idProv==1){
+		printf("La ciudad mas calida de Cordoba es %s, con una temperatura promedio de: %.2f °C\n", MaxCadena, max);
+	}else if(idProv==2){
+		printf("La ciudad mas calida de Santa Fe es %s, con una temperatura promedio de: %.2f °C\n", MaxCadena, max);
+	}else if(idProv==3){
+		printf("La ciudad mas calida de Mendoza es %s, con una temperatura promedio de: %.2f °C\n", MaxCadena, max);
+	}
 }
+
+void ciudadFria(struct city *head)
+{
+	struct city *temp=NULL;
+	temp=head;
+	int i=0, idAux=0, idProv=0;
+	char cadena[50],MinCadena[50];
+	float suma=0, min=100;
+	idAux=temp->cityId;
+	while(temp!=NULL)
+	{
+		if(temp->cityId==idAux)
+		{
+			suma=suma+temp->m.temp;
+			i++;
+			strcpy(cadena, temp->city_name);
+			idProv=temp->provId;
+		}else{
+			if(suma/i<min)
+				{
+				min=suma/i;
+				strcpy(MinCadena, cadena);
+			}
+			i=1;
+			suma=temp->m.temp;
+			idAux=temp->cityId;
+		}
+		temp=temp->next;
+	}
+	if(idProv==1){
+		printf("La ciudad mas fria de Cordoba es %s, con una temperatura promedio de: %.2f °C\n", MinCadena, min);
+	}else if(idProv==2){
+		printf("La ciudad mas fria de Santa Fe es %s, con una temperatura promedio de: %.2f °C\n", MinCadena, min);
+	}else if(idProv==3){
+		printf("La ciudad mas fria de Mendoza es %s, con una temperatura promedio de: %.2f °C\n", MinCadena, min);
+	}
+}
+
 void diaFrio(struct city *head, int idProv)
 {
 	struct city *temp=head;
-	int d=0, m=0;
+	int d=0, m=0;//dia y mes
 	char cadena[50];
 	float min=100;
 	
@@ -225,16 +285,12 @@ void diaFrio(struct city *head, int idProv)
 		if(temp->m.temp<min)
 		{
 			min=temp->m.temp;
-			for(int i=0; i<50; i++)
-			{
-				cadena[i]=temp->city_name[i];
-			}
+			strcpy(cadena, temp->city_name);
 			d=temp->m.time.day;
 			m=temp->m.time.month;
 		}
 		temp=temp->next;
 	}
-	
 	if(idProv==1){
 		printf("El dia mas frio de Cordoba es %d/%d, con una temperatura de %.2f °C en la ciudad de %s\n", d, m, min, cadena);
 	}else if(idProv==2){
@@ -244,24 +300,27 @@ void diaFrio(struct city *head, int idProv)
 	}
 }
 
-
 void diaCalor(struct city *head){
 	float max=0;
-	int dia=0,mes=0;
-	struct city *temp=head;
+	int aux=0,dia=0,mes=0;
+	struct city *temp=NULL;
 	char cadena[50];
-	struct Data d = ciudadCalida(head);
+	temp=head;
+	aux=temp->cityId;
 	while(temp!=NULL){
-		if(temp->cityId==d.datai){//datai==identificador de ciudad
+		if(temp->cityId==aux){
 			if(temp->m.temp>max){
 				max=temp->m.temp;
 				dia=temp->m.time.day;
 				mes=temp->m.time.month;
-				for(int k=0; k<50; k++)
-				{
-					cadena[k]=temp->city_name[k];
-				}
+				strcpy(cadena, temp->city_name);
 			}
+		}else{
+			printf("El dia mas caluroso de la ciudad %s fue el dia %d/%d con %.2f °C.\n",cadena,dia,mes,max);
+			aux=temp->cityId;
+			max=temp->m.temp;
+			dia=temp->m.time.day;
+			mes=temp->m.time.month;
 		}
 		temp=temp->next;
 	}

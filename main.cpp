@@ -13,55 +13,53 @@ int main() {
 	struct city *Cordoba=NULL;
 	struct city *SantaFe=NULL;
 	struct city *Mendoza=NULL;
-	struct Data d;
-	float promCordoba=tempPromProvincia(Cordoba), promSantaFe=tempPromProvincia(SantaFe), promMendoza=tempPromProvincia(Mendoza);
+	struct Data *d;
+	float promCordoba=0.0, promSantaFe=0.0, promMendoza=0.0;
+	int cantCordoba=0, cantSantaFe=0, cantMendoza=0;
 	char seguir='s';
 
 	file.scanText(&Cordoba, &SantaFe, &Mendoza);
+	cantCordoba=cantidadMedidas(Cordoba);
+	cantSantaFe=cantidadMedidas(SantaFe);
+	cantMendoza=cantidadMedidas(Mendoza);
+	promCordoba=tempPromProvincia(Cordoba);
+	promSantaFe=tempPromProvincia(SantaFe);
+	promMendoza=tempPromProvincia(Mendoza);
+	
 
-	while (seguir=='s')
+	while (seguir=='s' || seguir=='S')
 	{
 		switch (menu())
 		{
-		case 1:
-			printf("Cantidad de mediciones: %d\n",cantidadMedidas(Cordoba)+cantidadMedidas(SantaFe)+cantidadMedidas(Mendoza));
+		case 1://funciona
+			printf("Cantidad de mediciones de Cordoba: %d\n",cantCordoba);
+			printf("Cantidad de mediciones de Santa Fe: %d\n",cantSantaFe);
+			printf("Cantidad de mediciones de Mendoza: %d\n",cantMendoza);
 			break;
-		case 2:
+		case 2://funciona
 			printf("Temperatura promedio de la provincia de Cordoba: %.2f\n",promCordoba);
 			printf("Temperatura promedio de la provincia de Mendoza: %.2f\n",promMendoza);
 			printf("Temperatura promedio de la provincia de Santa Fe: %.2f\n",promSantaFe);
 			break;
 		case 3:
-			for (int i = 0; i < 77; i++)//dudoso, ver
-			{
-				d=tempPromCiudad(Cordoba,i);
-				printf("Temperatura promedio de %s de Cordoba: %.2f\n",d.cityName,d.dataf);
-				d=tempPromCiudad(Mendoza,i);
-				printf("Temperatura promedio de %s de Mendoza: %.2f\n",d.cityName,d.dataf);
-				d=tempPromCiudad(SantaFe,i);
-				printf("Temperatura promedio de %s de Santa Fe: %.2f\n",d.cityName,d.dataf);
-			}
+			tempPromCiudad(Cordoba);
+			tempPromCiudad(Mendoza);
+			tempPromCiudad(SantaFe);
 			break;
 		case 4:
-			d=ciudadCalida(Cordoba);
-			printf("La ciudad mas calida de Cordoba es %s con una temperatura de %.2f\n",d.cityName,d.dataf);
-			d=ciudadCalida(Mendoza);
-			printf("La ciudad mas calida de Mendoza es %s con una temperatura de %.2f\n",d.cityName,d.dataf);
-			d=ciudadCalida(SantaFe);
-			printf("La ciudad mas calida de Santafe es %s con una temperatura de %.2f\n",d.cityName,d.dataf);
+			ciudadCalida(Cordoba);
+			ciudadCalida(Mendoza);
+			ciudadCalida(SantaFe);
 			break;
 		case 5:
-			d=ciudadFria(Cordoba);
-			printf("La ciudad mas fria de Cordoba es %s con una temperatura de %.2f\n",d.cityName,d.dataf);
-			d=ciudadFria(Mendoza);
-			printf("La ciudad mas fria de Mendoza es %s con una temperatura de %.2f\n",d.cityName,d.dataf);
-			d=ciudadFria(SantaFe);
-			printf("La ciudad mas fria de Santafe es %s con una temperatura de %.2f\n",d.cityName,d.dataf);
+			ciudadFria(Cordoba);
+			ciudadFria(Mendoza);
+			ciudadFria(SantaFe);
 			break;
 		case 6:
-			diaFrio(Cordoba,Cordoba->cityId);
-			diaFrio(Mendoza, Mendoza->cityId);
-			diaFrio(SantaFe, SantaFe->cityId);
+			diaFrio(Cordoba, Cordoba->provId);
+			diaFrio(Mendoza, Mendoza->provId);
+			diaFrio(SantaFe, SantaFe->provId);
 			break;
 		case 7:
 			diaCalor(Cordoba);

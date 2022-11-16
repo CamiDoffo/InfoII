@@ -39,14 +39,15 @@ class Archivo{
 };
 
 int menu();
-char* convert_to_string(char a[50]);
+//char* convert_to_string(char a[50]);
+void ordenarLista(struct city **City);
 void push(struct measurement m, int cityId, int provId, char city_name[50], struct city **head);
 void borrarTodo(struct city **head);
 int cantidadMedidas(struct city *City);
 float tempPromProvincia(struct city *City);
-struct Data tempPromCiudad(struct city *head, int id);
-struct Data ciudadCalida(struct city *head);
-struct Data ciudadFria(struct city *head);
+void tempPromCiudad(struct city *head);
+void ciudadCalida(struct city *head);
+void ciudadFria(struct city *head);
 void diaFrio(struct city *head, int idProv);
 void diaCalor(struct city *head);
 void provPimientos(float promCordoba, float promSantaFe, float promMendoza);
