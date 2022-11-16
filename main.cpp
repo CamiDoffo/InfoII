@@ -1,13 +1,15 @@
 #include <iostream>
 #include <stdio.h>
+#include <cstring>
+#include <string.h>
+#include <stdlib.h>
+#include <math.h>
 #include "archivo.h"
 #include "archivo_helper.cpp"
+#include "analisis_data.cpp"
 using namespace std;
 
 
-//int cantidadMedidas(struct city *City);
-void push(struct measurement m, int cityId, int provId, char city_name[50], struct city **head);
-int menu();
 int main(int argc, char *argv[]) {
 	Archivo file;
 	struct city *Cordoba=NULL;
@@ -27,42 +29,41 @@ int main(int argc, char *argv[]) {
 			printf("Cantidad de mediciones: %d",cantidadMedidas(Cordoba)+cantidadMedidas(SantaFe)+cantidadMedidas(Mendoza));
 			break;
 		case 2:
-			for (int i = 0; i < 77; i++)//dudoso, ver
-			{
-				printf("Temperatura promedio de la provincia de Cordoba: %.2f",promCordoba);
-				printf("Temperatura promedio de la provincia de Mendoza: %.2f",promMendoza);
-				printf("Temperatura promedio de la provincia de Santa Fe: %.2f",promSantaFe);
-			}
+			printf("Temperatura promedio de la provincia de Cordoba: %.2f",promCordoba);
+			printf("Temperatura promedio de la provincia de Mendoza: %.2f",promMendoza);
+			printf("Temperatura promedio de la provincia de Santa Fe: %.2f",promSantaFe);
 			break;
 		case 3:
 			for (int i = 0; i < 77; i++)//dudoso, ver
 			{
-
-				printf("Temperatura promedio de ciudad de Cordoba: %.2f",tempPromCiudad(Cordoba,i).dataf);
-				printf("Temperatura promedio de ciudad de Mendoza: %.2f",tempPromCiudad(Mendoza,i).dataf);
-				printf("Temperatura promedio de ciudad de Santa Fe: %.2f",tempPromCiudad(SantaFe,i).dataf);
+				d=tempPromCiudad(Cordoba,i);
+				printf("Temperatura promedio de %s de Cordoba: %.2f",convert_to_string(d.cityName),d.dataf);
+				d=tempPromCiudad(Mendoza,i);
+				printf("Temperatura promedio de %s de Mendoza: %.2f",convert_to_string(d.cityName),d.dataf);
+				d=tempPromCiudad(SantaFe,i);
+				printf("Temperatura promedio de %s de Santa Fe: %.2f",convert_to_string(d.cityName),d.dataf);
 			}
 			break;
 		case 4:
 			d=ciudadCalida(Cordoba);
-			printf("La ciudad mas calida de Cordoba es %s con una temperatura de %.2f",d.cityName,d.dataf);
+			printf("La ciudad mas calida de Cordoba es %s con una temperatura de %.2f",convert_to_string(d.cityName),d.dataf);
 			d=ciudadCalida(Mendoza);
-			printf("La ciudad mas calida de Mendoza es %s con una temperatura de %.2f",d.cityName,d.dataf);
+			printf("La ciudad mas calida de Mendoza es %s con una temperatura de %.2f",convert_to_string(d.cityName),d.dataf);
 			d=ciudadCalida(SantaFe);
-			printf("La ciudad mas calida de Santafe es %s con una temperatura de %.2f",d.cityName,d.dataf);
+			printf("La ciudad mas calida de Santafe es %s con una temperatura de %.2f",convert_to_string(d.cityName),d.dataf);
 			break;
 		case 5:
 			d=ciudadFria(Cordoba);
-			printf("La ciudad mas fria de Cordoba es %s con una temperatura de %.2f",d.cityName,d.dataf);
+			printf("La ciudad mas fria de Cordoba es %s con una temperatura de %.2f",convert_to_string(d.cityName),d.dataf);
 			d=ciudadFria(Mendoza);
-			printf("La ciudad mas fria de Mendoza es %s con una temperatura de %.2f",d.cityName,d.dataf);
+			printf("La ciudad mas fria de Mendoza es %s con una temperatura de %.2f",convert_to_string(d.cityName),d.dataf);
 			d=ciudadFria(SantaFe);
-			printf("La ciudad mas fria de Santafe es %s con una temperatura de %.2f",d.cityName,d.dataf);
+			printf("La ciudad mas fria de Santafe es %s con una temperatura de %.2f",convert_to_string(d.cityName),d.dataf);
 			break;
 		case 6:
-			diaFrio(Cordoba);
-			diaFrio(Mendoza);
-			diaFrio(SantaFe);
+			diaFrio(Cordoba,Cordoba->cityId);
+			diaFrio(Mendoza, Mendoza->cityId);
+			diaFrio(SantaFe, SantaFe->cityId);
 			break;
 		case 7:
 			diaCalor(Cordoba);
@@ -80,24 +81,8 @@ int main(int argc, char *argv[]) {
 		scanf(" %c", &seguir);
 	}
 	
-
-
-
-
+	borrarTodo(&Cordoba);
+	borrarTodo(&Mendoza);
+	borrarTodo(&SantaFe);
 	return 0;
-}
-
-int menu(){
-	int op=0;
-	printf("Ingrese una opcion:\n"
-			"1.Cantidad de mediciones por provincia\n"
-			"2.Temperatura promedio de cada provincia\n"
-			"3.Temperatura promedio de cada ciudad\n"
-			"4.Ciudad mas calida de cada provincia\n"
-			"5.Ciudad mas fria de cada provincia\n"
-			"6.Dia mas frio de cada provincia\n"
-			"7.Cia mas calido de cada ciudad\n"
-			"8.Mejor provincia para cultivar pimientos\n");
-	scanf("%d", &op);
-	return op;
 }
