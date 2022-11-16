@@ -1,5 +1,76 @@
+#include <iostream>
+#include <stdio.h>
+#include <cstring>
+#include <string.h>
+#include <stdlib.h>
+#include <math.h>
 #include "archivo.h"
+Archivo::Archivo(){
+}
+Archivo::~Archivo(){
+}
+void check_null(FILE *fp)
+{
+	if(fp==NULL)
+	{
+		printf("Imposible mostrar\n");
+		exit(1);
+	}else{
+		printf("Archivo encontrado\n\n");
+	}
+}
 
+void Archivo::scanText(struct city **Cordoba,struct city **SantaFe,struct city **Mendoza)
+{
+	int id_prov=0, id_ciudad=0, mes=0, dia=0, hora=0, min=0;
+    struct measurement m;
+	char nombre[50];
+	float temperatura=0, humedad=0;
+    
+	
+	this->fp=fopen("data_set.txt", "r");
+	
+	check_null(this->fp);
+	while(!feof(this->fp))
+	{
+		fscanf(this->fp,"%d	%d",&id_ciudad,&id_prov);
+		if(id_prov==1)	{
+            strcpy(nombre, "Cordoba");
+			fscanf(this->fp,"	%s			%f	%f	%d	%d	%d	%d\n", nombre, &temperatura, &humedad, &hora, &min, &dia, &mes);
+            m.hum=humedad;
+            m.temp=temperatura;
+            m.time.hh=hora;
+            m.time.mm=min;
+            m.time.day=dia;
+            m.time.month=mes;
+			push(m,id_ciudad,id_prov,nombre, Cordoba);
+		}else if(id_prov==2){
+            strcpy(nombre, "Santa Fe");
+			fscanf(this->fp,"	%s			%f	%f	%d	%d	%d	%d\n", nombre, &temperatura, &humedad, &hora, &min, &dia, &mes);
+			m.hum=humedad;
+            m.temp=temperatura;
+            m.time.hh=hora;
+            m.time.mm=min;
+            m.time.day=dia;
+            m.time.month=mes;
+            push(m,id_ciudad,id_prov,nombre,SantaFe);
+		}else if(id_prov==3){
+            strcpy(nombre, "Mendoza");
+			fscanf(this->fp,"	%s			%f	%f	%d	%d	%d	%d\n", nombre, &temperatura, &humedad, &hora, &min, &dia, &mes);
+			m.hum=humedad;
+            m.temp=temperatura;
+            m.time.hh=hora;
+            m.time.mm=min;
+            m.time.day=dia;
+            m.time.month=mes;
+            push(m,id_ciudad,id_prov,nombre,Mendoza);
+		}else{
+			fscanf(this->fp, "%*[^n]n");
+		}
+	}
+	
+	fclose(this->fp);
+}
 int menu(){
 	int op=0;
 	printf("Ingrese una opcion:\n"
@@ -15,14 +86,14 @@ int menu(){
 	return op;
 }
 
-char* convert_to_string(char a[50]){
-	char* s = "";
-	for (int i = 0; i < 50; i++)
-	{
-		s=s+a[i];
-	}
-	return s;
-}
+// char* convert_to_string(char a[50]){
+// 	char* s = "";
+// 	for (int i = 0; i < 50; i++)
+// 	{
+// 		s=s+a[i];
+// 	}
+// 	return s;
+// }
 
 void push(struct measurement m, int cityId, int provId, char city_name[50], struct city **head){
     struct city *temp=*head;
@@ -71,17 +142,17 @@ int cantidadMedidas(struct city *City){
 float tempPromProvincia(struct city *City)
 {
 	struct city *temp=NULL;
-	float prom=0.0;
+	float sum=0.0,prom=0.0;
 	int i=0;
 	temp=City;
 	while(temp!=NULL)
 	{
-		prom+=temp->m.temp;
+		sum+=temp->m.temp;
 		i++;
 		temp=temp->next;
 	}
-	
-	return prom/i;
+	prom=sum/i;
+	return prom;
 }
 
 struct Data tempPromCiudad(struct city *head, int id)
@@ -104,12 +175,11 @@ struct Data tempPromCiudad(struct city *head, int id)
 		}
 		temp=temp->next;
 	}
-	d.dataf=suma/(float)i;
+	d.dataf=suma/i;
 	return d;
 }
 struct Data ciudadCalida(struct city *head)
 {
-	struct city *temp=head;
 	struct Data d;
 	d.dataf=tempPromCiudad(head, 0).dataf;
 
@@ -166,11 +236,11 @@ void diaFrio(struct city *head, int idProv)
 	}
 	
 	if(idProv==1){
-		printf("El dia mas frio de Cordoba es %d/%d, con una temperatura de %.2f °C en la ciudad de %s\n", d, m, min, convert_to_string(cadena));
+		printf("El dia mas frio de Cordoba es %d/%d, con una temperatura de %.2f °C en la ciudad de %s\n", d, m, min, cadena);
 	}else if(idProv==2){
-		printf("El dia mas frio de Santa Fe es %d/%d, con una temperatura de %.2f °C en la ciudad de %s\n", d, m, min, convert_to_string(cadena));
+		printf("El dia mas frio de Santa Fe es %d/%d, con una temperatura de %.2f °C en la ciudad de %s\n", d, m, min, cadena);
 	}else if(idProv==3){
-		printf("El dia mas frio de Mendoza es %d/%d, con una temperatura de %.2f °C en la ciudad de %s\n", d, m, min, convert_to_string(cadena));
+		printf("El dia mas frio de Mendoza es %d/%d, con una temperatura de %.2f °C en la ciudad de %s\n", d, m, min, cadena);
 	}
 }
 
@@ -195,7 +265,7 @@ void diaCalor(struct city *head){
 		}
 		temp=temp->next;
 	}
-	printf("El dia mas caluroso de la ciudad %s fue el dia %d/%d con %.2f °C.\n",convert_to_string(cadena),dia,mes,max);	
+	printf("El dia mas caluroso de la ciudad %s fue el dia %d/%d con %.2f °C.\n",cadena,dia,mes,max);	
 }
 
 void provPimientos(float promCordoba, float promSantaFe, float promMendoza)
