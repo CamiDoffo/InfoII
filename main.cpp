@@ -13,7 +13,6 @@ int main() {
 	struct city *Cordoba=NULL;
 	struct city *SantaFe=NULL;
 	struct city *Mendoza=NULL;
-	struct Data *d;
 	float averageCordoba=0.0, averageSantaFe=0.0, averageMendoza=0.0;
 	int amountCordoba=0, amountSantaFe=0, amountMendoza=0;
 	char keep='s';

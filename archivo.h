@@ -4,11 +4,6 @@
 #include <math.h>
 using namespace std;
 
-struct Data{
-	char cityName[50];
-	float dataf;
-	int datai;
-};
 struct timestamp{
 	int day;
 	int month;
@@ -39,7 +34,6 @@ class Archive{
 };
 
 int menu();
-//char* convert_to_string(char a[50]);
 void sortList(struct city **City);
 void push(struct measurement m, int cityId, int provId, char city_name[50], struct city **head);
 void popAll(struct city **head);

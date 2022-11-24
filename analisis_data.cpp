@@ -122,7 +122,7 @@ void push(struct measurement m, int cityId, int provId, char city_name[50], stru
         printf("Memoria insuficiente\n");
         exit(0);
     }else{
-        //seteo el nuevo nodo
+        //Set new node
         new_node->m=m;
 		new_node->cityId=cityId;
 		new_node->provId=provId;
@@ -216,7 +216,7 @@ void hottestCity(struct city *head)
 			idProv=temp->provId;
 		}else{
 			if(add/i>max)
-				{
+			{
 				max=add/i;
 				strcpy(MaxChain, chain);
 			}
